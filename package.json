@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@ledgerhq/hw-transport-node-hid": "^4.35.0",
+    "@ledgerhq/logs": "^4.60.2",
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
