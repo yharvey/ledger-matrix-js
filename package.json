@@ -1,11 +1,11 @@
 {
-  "name": "ledger-matrixai-js",
+  "name": "ledger-matrix",
   "version": "0.0.0",
   "description": "JSNode API for MatrixAI apps running in Ledger Nano S/X",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zondax/ledger-matrixai-js.git"
+    "url": "git+https://github.com/zondax/ledger-matrix-js.git"
   },
   "keywords": [
     "Ledger",
@@ -15,9 +15,9 @@
   "author": "ZondaX GmbH",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/zondax/ledger-matrixai-js/issues"
+    "url": "https://github.com/zondax/ledger-matrix-js/issues"
   },
-  "homepage": "https://github.com/zondax/ledger-matrixai-js",
+  "homepage": "https://github.com/zondax/ledger-matrix-js",
   "dependencies": {
     "@ledgerhq/hw-transport": "^4.35.0",
     "@babel/runtime": "^7.4.4",
