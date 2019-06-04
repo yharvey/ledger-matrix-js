@@ -1,6 +1,6 @@
 {
   "name": "ledger-matrixai-js",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "JSNode API for MatrixAI apps running in Ledger Nano S/X",
   "main": "./dist/index.js",
   "repository": {

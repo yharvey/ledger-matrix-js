@@ -77,9 +77,14 @@ export default class MatrixAIApp {
         return buf;
     }
 
-    async getAddress(account, change, addressIndex) {
+    async getAddress(account, change, addressIndex, requireConfirmation = false) {
         const bip44Path = MatrixAIApp.serializeMANBIP44(account, change, addressIndex);
-        return this.transport.send(CLA, INS.GETADDR_SECP256K1, 0, 0, bip44Path)
+
+        let p1 = 0;
+        if (requireConfirmation)
+            p1 = 1;
+
+        return this.transport.send(CLA, INS.GETADDR_SECP256K1, p1, 0, bip44Path)
             .then(
                 (response) => {
                     const errorCodeData = response.slice(-2);
@@ -96,5 +101,4 @@ export default class MatrixAIApp {
                 },
             );
     }
-
 }
