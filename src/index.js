@@ -15,9 +15,6 @@
  *  limitations under the License.
  ******************************************************************************* */
 
-import Transport from '@ledgerhq/hw-transport';
-import { TransportStatusError } from '@ledgerhq/hw-transport';
-
 const CLA = 0x88;
 
 const INS = {
@@ -26,10 +23,9 @@ const INS = {
     SIGN_SECP256K1: 0x02,
 };
 
-
-export default class MatrixAIApp {
-    constructor(transport, scrambleKey = 'man') {
-        if (typeof transport == 'undefined') {
+export default class MatrixApp {
+    constructor(transport, scrambleKey = 'MAN') {
+        if (typeof transport === 'undefined') {
             throw new Error('Transport has not been defined');
         }
 
@@ -38,6 +34,7 @@ export default class MatrixAIApp {
             this,
             [
                 'getVersion',
+                'getAddress',
             ],
             scrambleKey,
         );
@@ -48,7 +45,7 @@ export default class MatrixAIApp {
             .then(
                 (response) => {
                     const errorCodeData = response.slice(-2);
-                    return {
+                    const answer = {
                         test_mode: response[0] !== 0,
                         major: response[1],
                         minor: response[2],
@@ -57,8 +54,11 @@ export default class MatrixAIApp {
                         return_code: errorCodeData[0] * 256 + errorCodeData[1],
                         // TODO: Improve error handle
                         // TODO: Unify error messages
-                        error_message: '????'
+                        error_message: '????',
                     };
+
+                    console.log(answer);
+                    return answer;
                 },
             );
     }
@@ -78,11 +78,10 @@ export default class MatrixAIApp {
     }
 
     async getAddress(account, change, addressIndex, requireConfirmation = false) {
-        const bip44Path = MatrixAIApp.serializeMANBIP44(account, change, addressIndex);
+        const bip44Path = MatrixApp.serializeMANBIP44(account, change, addressIndex);
 
         let p1 = 0;
-        if (requireConfirmation)
-            p1 = 1;
+        if (requireConfirmation) p1 = 1;
 
         return this.transport.send(CLA, INS.GETADDR_SECP256K1, p1, 0, bip44Path)
             .then(

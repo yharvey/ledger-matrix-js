@@ -1,11 +1,11 @@
-import MatrixAIApp from 'index.js';
+import MatrixApp from 'index.js';
 import TransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 
 test('get version', async () => {
     const transport = await TransportNodeHid.create(1000);
     transport.setDebugMode(true);
 
-    const app = new MatrixAIApp(transport);
+    const app = new MatrixApp(transport);
     const version = await app.getVersion();
     console.log(version);
 });
@@ -14,7 +14,7 @@ test('get address', async () => {
     const transport = await TransportNodeHid.create(1000);
     transport.setDebugMode(true);
 
-    const app = new MatrixAIApp(transport);
+    const app = new MatrixApp(transport);
     const response = await app.getAddress(0, 0, 0);
 
     expect(response.pubKey)
@@ -33,7 +33,7 @@ test('show address', async () => {
     const transport = await TransportNodeHid.create(1000);
     transport.setDebugMode(true);
 
-    const app = new MatrixAIApp(transport);
+    const app = new MatrixApp(transport);
     const response = await app.getAddress(0, 0, 0, true);
 
     expect(response.pubKey)
