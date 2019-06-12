@@ -90,7 +90,7 @@ export default class MatrixApp {
                     return {
                         pubKey: response.slice(0, 65)
                             .toString('hex'),
-                        address: response.slice(65, 97)
+                        address: response.slice(65, response.length - 2)
                             .toString('ascii'),
                         return_code: errorCodeData[0] * 256 + errorCodeData[1],
                         // TODO: Improve error handle
