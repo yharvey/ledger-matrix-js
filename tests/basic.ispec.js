@@ -44,10 +44,10 @@ test('get HD addresses, check CRC', async () => {
         const crcByte = crc8(response.address.slice(0, -1));
         const crcChar = bs58.encode(Buffer.from([crcByte % 58]));
 
-        expect(crcChar).toEqual(response.address.slice(-1));
+        expect(crcChar)
+            .toEqual(response.address.slice(-1));
     }
 });
-
 
 test('show address', async () => {
     jest.setTimeout(60000);
@@ -68,4 +68,21 @@ test('show address', async () => {
         .toEqual('MAN.cUTaQZsmCAdpshzWnFiatff8QZHv');
 });
 
-// TODO: Sign+Verify
+test('sign transaction', async () => {
+    jest.setTimeout(60000);
+
+    const transport = await TransportNodeHid.create(1000);
+    transport.setDebugMode(true);
+
+    const txBlobStr = ''
+        + 'f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485'
+        + 'a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131'
+        + 'adad038080808086016850894a0fc4c30480c0';
+
+    const txBlob = Buffer.from(txBlobStr, 'hex');
+
+    const app = new MatrixApp(transport);
+    const response = await app.sign(0, 0, 0, txBlob);
+
+    console.log(response);
+});
