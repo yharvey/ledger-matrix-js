@@ -58,6 +58,8 @@ test('show address', async () => {
     const app = new MatrixApp(transport);
     const response = await app.getAddress(0, 0, 0, true);
 
+    console.log(response);
+
     expect(response.pubKey)
         .toEqual(
             '0491c5822f1e8e096d5834c19f53933d9e1d9c653a52c7b7f27e35a202bb4d7d7'
@@ -68,7 +70,7 @@ test('show address', async () => {
         .toEqual('MAN.cUTaQZsmCAdpshzWnFiatff8QZHv');
 });
 
-test('sign transaction', async () => {
+test('sign', async () => {
     jest.setTimeout(60000);
 
     const transport = await TransportNodeHid.create(1000);
