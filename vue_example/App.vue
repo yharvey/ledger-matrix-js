@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <img
-      alt="Vue logo"
-      src="./assets/logo.png"
+            alt="Zondax logo"
+            src="./assets/logo.png"
+            width="300"
     >
     <h1>Matrix+Ledger integration example</h1>
     <MatrixLedger msg="Minimal Matrix+Ledger integration example" />
