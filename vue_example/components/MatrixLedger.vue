@@ -30,8 +30,12 @@
       Show Address
     </button>
     <br>
-    <button @click="signExampleTx">
-      Sign Example TX
+    <button @click="signExampleTx1">
+      Sign Example1 TX - Small
+    </button>
+    <br>
+    <button @click="signExampleTx2">
+      Sign Example2 TX - Large
     </button>
     <!--
             Commands
@@ -84,16 +88,14 @@ export default {
                     transport = await TransportWebUSB.create();
                 } catch (e) {
                     this.log(e);
-                    return;
                 }
             }
 
             if (this.transportChoice === 'U2F') {
                 try {
-                    transport = await TransportU2F.create(10000);
+                    transport = await TransportU2F.create();
                 } catch (e) {
                     this.log(e);
-                    return;
                 }
             }
 
@@ -167,28 +169,48 @@ export default {
             this.log('Full response:');
             this.log(response);
         },
-        async signExampleTx() {
+        async signTx(txBlobStr) {
             this.deviceLog = [];
 
             // Given a transport (U2F/HIF/WebUSB) it is possible instantiate the app
             const transport = await this.getTransport();
             const app = new MatrixApp(transport);
-
-            // now it is possible to access all commands in the app
-            const txBlobStr = ''
-                    + 'f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485'
-                    + 'a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131'
-                    + 'adad038080808086016850894a0fc4c30480c0';
-
             const message = Buffer.from(txBlobStr, 'hex');
             const response = await app.sign(0, 0, 0, message);
 
             this.log('Response received!');
             this.log('...');
-            this.log(`Signature: ${response.signature.toString('hex')}`);
-            this.log('...');
+            if (response.return_code === 0x9000) {
+                this.log(`Signature: ${response.signature.toString('hex')}`);
+                this.log('...');
+            }
             this.log('Full response:');
             this.log(response);
+        },
+        async signExampleTx1() {
+            const txBlobStr = ''
+                + 'f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485'
+                + 'a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131'
+                + 'adad038080808086016850894a0fc4c30480c0';
+            this.signTx(txBlobStr);
+        },
+        async signExampleTx2() {
+            const txBlobStr = ''
+                + 'f901e180850430e2340083033450'
+                + 'a04d414e2e576b62756a7478683759426e6b475638485a767950514b3363415079'
+                + '83989680'
+                + 'b9019d5b7b22456e7472757374416464726573223a224d414e2e32556f7a3867386a61754d61326d746e777872'
+                + '7363686a3271504a7245222c224973456e7472757374476173223a747275652c224973456e7472757374536967'
+                + '6e223a66616c73652c225374617274486569676874223a313232322c22456e64486569676874223a3132323232'
+                + '322c22456e73747275737453657454797065223a302c22757365537461727454696d65223a22222c2275736545'
+                + '6e6454696d65223a22222c22456e7472757374436f756e74223a307d2c7b22456e747275737441646472657322'
+                + '3a224d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a7245222c224973456e747275'
+                + '7374476173223a747275652c224973456e74727573745369676e223a66616c73652c2253746172744865696768'
+                + '74223a3132323232332c22456e64486569676874223a3132323232392c22456e73747275737453657454797065'
+                + '223a302c22757365537461727454696d65223a22222c22757365456e6454696d65223a22222c22456e74727573'
+                + '74436f756e74223a307d5d038080808086016850894a0fc4c30580c0';
+
+            this.signTx(txBlobStr);
         },
     },
 };

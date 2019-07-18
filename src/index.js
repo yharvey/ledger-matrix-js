@@ -65,6 +65,7 @@ export default class MatrixApp {
             [
                 'getVersion',
                 'getAddress',
+                'sign',
             ],
             scrambleKey,
         );
