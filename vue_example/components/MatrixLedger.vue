@@ -60,6 +60,7 @@
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
+import Transaction from 'matrixjs-tx'
 import MatrixApp from '../../src';
 
 export default {
@@ -187,6 +188,8 @@ export default {
             if (response.return_code === 0x9000) {
                 this.log(`Signature: ${response.signature.toString('hex')}`);
                 this.log('...');
+                const txData = new Transaction(response.signature.toString('hex'), true)
+
             }
             this.log('Full response:');
             this.log(response);
