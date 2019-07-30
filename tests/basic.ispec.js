@@ -119,9 +119,13 @@ test('sign2_and_verify', async () => {
     const hash = crypto.createHash('sha256');
     const msgHash = hash.update(txBlob).digest();
 
-    const signatureDER = responseSign.signature;
-    const signature = secp256k1.signatureImport(signatureDER);
-    const signatureOK = secp256k1.verify(msgHash, signature, Buffer.from(responseAddr.pubKey, 'hex'));
+    // Check DER signature
+    let signature = secp256k1.signatureImport(responseSign.der);
+    let signatureOK = secp256k1.verify(msgHash, signature, Buffer.from(responseAddr.pubKey, 'hex'));
+    expect(signatureOK).toEqual(true);
 
+    // Check S,R signature
+    signature = Buffer.concat([responseSign.s, responseSign.r]);
+    signatureOK = secp256k1.verify(msgHash, signature, Buffer.from(responseAddr.pubKey, 'hex'));
     expect(signatureOK).toEqual(true);
 });

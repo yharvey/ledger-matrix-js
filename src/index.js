@@ -197,10 +197,18 @@ export default class MatrixApp {
                         }
                     }
 
+                    const v = result.signature.slice(0, 1);
+                    const s = result.signature.slice(1, 33);
+                    const r = result.signature.slice(33, 65);
+                    const der = result.signature.slice(65, result.signature.length);
+
                     return {
                         return_code: result.return_code,
                         error_message: result.error_message,
-                        signature: result.signature,
+                        der,
+                        v,
+                        r,
+                        s,
                     };
                 },
                 MatrixApp.processErrorResponse,
