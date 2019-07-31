@@ -105,6 +105,16 @@ export default class MatrixApp {
         return buf;
     }
 
+    static compressPublicKey(publicKey) {
+        if (publicKey.length !== 65) {
+            throw new Error('decompressed public key length should be 65 bytes');
+        }
+        const y = publicKey.slice(33, 65);
+        // eslint-disable-next-line no-bitwise,new-cap
+        const z = new Buffer.from([2 + (y[y.length - 1] & 1)]);
+        return Buffer.concat([z, publicKey.slice(1, 33)]);
+    }
+
     async getAddress(account, change, addressIndex, requireConfirmation = false) {
         const bip44Path = MatrixApp.serializeMANBIP44(account, change, addressIndex);
 
@@ -116,9 +126,10 @@ export default class MatrixApp {
                 (response) => {
                     const errorCodeData = response.slice(-2);
                     const errorCode = errorCodeData[0] * 256 + errorCodeData[1];
+                    const pk = response.slice(0, 65);
                     return {
-                        pubKey: response.slice(0, 65)
-                            .toString('hex'),
+                        pubKey: pk.toString('hex'),
+                        compressedPK: MatrixApp.compressPublicKey(pk).toString('hex'),
                         address: response.slice(65, response.length - 2)
                             .toString('ascii'),
                         return_code: errorCode,
@@ -198,8 +209,8 @@ export default class MatrixApp {
                     }
 
                     const v = result.signature.slice(0, 1);
-                    const s = result.signature.slice(1, 33);
-                    const r = result.signature.slice(33, 65);
+                    const r = result.signature.slice(1, 33);
+                    const s = result.signature.slice(33, 65);
                     const der = result.signature.slice(65, result.signature.length);
 
                     return {
