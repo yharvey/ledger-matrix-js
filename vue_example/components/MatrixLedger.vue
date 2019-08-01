@@ -186,7 +186,10 @@ export default {
             this.log('Response received!');
             this.log('...');
             if (response.return_code === 0x9000) {
-                this.log(`Signature: ${response.signature.toString('hex')}`);
+                this.log(`Signature (DER): ${response.der.toString('hex')}`);
+                this.log(`Signature (V) : ${response.v.toString('hex')}`);
+                this.log(`Signature (R) : ${response.r.toString('hex')}`);
+                this.log(`Signature (S) : ${response.s.toString('hex')}`);
                 this.log('...');
                 const txData = new Transaction(`0x${response.signature.toString('hex')}`, true);
                 this.log(txData);
